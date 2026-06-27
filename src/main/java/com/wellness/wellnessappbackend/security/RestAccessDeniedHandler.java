@@ -1,7 +1,8 @@
 package com.wellness.wellnessappbackend.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wellness.wellnessappbackend.exception.ApiErrorResponse;
+import com.wellness.wellnessappbackend.common.ErrorResponse;
+import com.wellness.wellnessappbackend.exception.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -25,12 +26,7 @@ public class RestAccessDeniedHandler implements AccessDeniedHandler {
             HttpServletResponse response,
             AccessDeniedException accessDeniedException
     ) throws IOException {
-        ApiErrorResponse body = ApiErrorResponse.of(
-                HttpStatus.FORBIDDEN.value(),
-                HttpStatus.FORBIDDEN.getReasonPhrase(),
-                "You do not have permission to access this resource",
-                request.getRequestURI()
-        );
+        ErrorResponse body = ErrorResponse.of("You do not have permission to access this resource", ErrorCode.FORBIDDEN);
 
         response.setStatus(HttpStatus.FORBIDDEN.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
