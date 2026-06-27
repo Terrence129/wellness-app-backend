@@ -1,62 +1,82 @@
 package com.wellness.wellnessappbackend.security;
 
+import com.wellness.wellnessappbackend.auth.JwtToken;
+import com.wellness.wellnessappbackend.user.AppUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class JwtService {
 
     private final SecretKey signingKey;
-    private final long expirationMillis;
+    private final String issuer;
+    private final String audience;
+    private final long expirationMinutes;
 
     public JwtService(
-            @Value("${jwt.secret}") String secret,
-            @Value("${jwt.expiration}") long expirationMillis
+            @Value("${app.jwt.secret}") String secret,
+            @Value("${app.jwt.issuer}") String issuer,
+            @Value("${app.jwt.audience}") String audience,
+            @Value("${app.jwt.expiration-minutes}") long expirationMinutes
     ) {
         this.signingKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-        this.expirationMillis = expirationMillis;
+        this.issuer = issuer;
+        this.audience = audience;
+        this.expirationMinutes = expirationMinutes;
     }
 
-    public String generateToken(String username) {
-        Date now = new Date();
-        Date expiresAt = new Date(now.getTime() + expirationMillis);
+    public JwtToken generateToken(AppUser user) {
+        Instant now = Instant.now();
+        Instant expiresAt = now.plus(expirationMinutes, ChronoUnit.MINUTES);
 
-        return Jwts.builder()
-                .subject(username)
-                .issuedAt(now)
-                .expiration(expiresAt)
+        String token = Jwts.builder()
+                .issuer(issuer)
+                .subject(user.getId().toString())
+                .audience().add(audience).and()
+                .issuedAt(Date.from(now))
+                .expiration(Date.from(expiresAt))
+                .id(UUID.randomUUID().toString())
+                .claim("scope", List.of("USER"))
                 .signWith(signingKey)
                 .compact();
+
+        return new JwtToken(token, expiresAt);
     }
 
-    public String extractUsername(String token) {
+    public Long extractUserId(String token) {
+        return Long.valueOf(extractSubject(token));
+    }
+
+    public String extractSubject(String token) {
         return extractAllClaims(token).getSubject();
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        String username = extractUsername(token);
-        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+    public boolean isTokenValid(String token, Long expectedUserId) {
+        Claims claims = extractAllClaims(token);
+        return expectedUserId.toString().equals(claims.getSubject())
+                && claims.getAudience().contains(audience)
+                && !claims.getExpiration().before(new Date());
     }
 
-    public long getExpirationMillis() {
-        return expirationMillis;
-    }
-
-    private boolean isTokenExpired(String token) {
-        return extractAllClaims(token).getExpiration().before(new Date());
+    public Instant expiresAt(String token) {
+        return extractAllClaims(token).getExpiration().toInstant();
     }
 
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
                 .verifyWith(signingKey)
+                .requireIssuer(issuer)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
