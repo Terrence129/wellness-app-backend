@@ -1,7 +1,8 @@
 package com.wellness.wellnessappbackend.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wellness.wellnessappbackend.exception.ApiErrorResponse;
+import com.wellness.wellnessappbackend.common.ErrorResponse;
+import com.wellness.wellnessappbackend.exception.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -25,15 +26,11 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
             HttpServletResponse response,
             AuthenticationException authException
     ) throws IOException {
-        ApiErrorResponse body = ApiErrorResponse.of(
-                HttpStatus.UNAUTHORIZED.value(),
-                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
-                "Authentication is required to access this resource",
-                request.getRequestURI()
-        );
+        ErrorResponse body = ErrorResponse.of("Authentication is required to access this resource", ErrorCode.UNAUTHORIZED);
 
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setHeader("WWW-Authenticate", "Bearer");
         objectMapper.writeValue(response.getOutputStream(), body);
     }
 }
