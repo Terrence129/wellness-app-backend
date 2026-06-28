@@ -1,4 +1,4 @@
-package com.wellness.wellnessappbackend.ai.dto;
+package com.wellness.wellnessappbackend.ai.advice.dto;
 
 import java.time.Instant;
 import java.time.LocalDate;

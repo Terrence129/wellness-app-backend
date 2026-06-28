@@ -22,6 +22,7 @@ Spring Boot backend for the SimpleWell wellness MVP. The API provides JWT-secure
 - Service-layer ownership checks for user-owned records
 - Weekly wellness summary with averages and totals
 - AI advice generation via internal FastAPI endpoint
+- AI chatbot conversations with persisted message history
 - Stable JSON success/error envelopes
 - Flyway-managed tables and seed data
 
@@ -38,6 +39,7 @@ Flyway creates:
 - `users`
 - `wellness_logs`
 - `ai_advice`
+- `ai_chat_messages`
 
 Seed users:
 
@@ -57,7 +59,7 @@ server.port=8080
 spring.datasource.url=jdbc:mysql://localhost:3306/wellness-app?useSSL=false&serverTimezone=Asia/Singapore&allowPublicKeyRetrieval=true
 spring.datasource.username=root
 spring.datasource.password=123456
-app.ai.base-url=http://localhost:8000
+app.ai.base-url=http://127.0.0.1:8000
 ```
 
 For production, set a long random `JWT_SECRET` and avoid committing secrets.
@@ -105,6 +107,7 @@ AI:
 
 - `POST /api/ai/advice`
 - `GET /api/ai/advice/latest`
+- `POST /api/ai/chat`
 
 Protected endpoints require:
 
@@ -142,16 +145,26 @@ Error:
 
 ## AI Service
 
-`POST /api/ai/advice` calls the internal FastAPI service:
+Clients call the Spring Boot API. Spring Boot loads the authenticated user, reads persisted logs or chat history, builds the FastAPI request body, and then calls the internal AI service.
+
+`POST /api/ai/advice` builds `{ "userId": ..., "logs": [...] }` from the selected date range and calls:
 
 ```text
 POST /ai/wellness-advice
 ```
 
+`POST /api/ai/chat` builds `{ "userId": ..., "message": ..., "history": [...] }` from the current message and stored conversation history, then calls:
+
+```text
+POST /ai/chat
+```
+
+Chat requests accept an optional `conversationId`. When omitted, the backend creates one and persists both the user message and assistant reply in `ai_chat_messages`.
+
 Configure its base URL with:
 
 ```properties
-app.ai.base-url=http://localhost:8000
+app.ai.base-url=http://127.0.0.1:8000
 ```
 
 If the AI service is unavailable, the backend returns `503 AI_SERVICE_UNAVAILABLE`.

@@ -1,7 +1,7 @@
-package com.wellness.wellnessappbackend.ai;
+package com.wellness.wellnessappbackend.ai.advice;
 
-import com.wellness.wellnessappbackend.ai.dto.AiAdviceDto;
-import com.wellness.wellnessappbackend.ai.dto.GenerateAiAdviceRequest;
+import com.wellness.wellnessappbackend.ai.advice.dto.AiAdviceDto;
+import com.wellness.wellnessappbackend.ai.advice.dto.GenerateAiAdviceRequest;
 import com.wellness.wellnessappbackend.common.ApiResponse;
 import com.wellness.wellnessappbackend.security.UserPrincipal;
 import jakarta.validation.Valid;
