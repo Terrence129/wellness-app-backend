@@ -1,24 +1,21 @@
 package com.wellness.wellnessappbackend.ai.chat;
 
 import com.wellness.wellnessappbackend.ai.AiClient;
-import com.wellness.wellnessappbackend.ai.advice.AiAdviceMapper;
-import com.wellness.wellnessappbackend.ai.advice.dto.PythonAiLog;
 import com.wellness.wellnessappbackend.ai.chat.dto.AiChatRequest;
 import com.wellness.wellnessappbackend.ai.chat.dto.AiChatResponse;
+import com.wellness.wellnessappbackend.ai.chat.dto.PythonChatMessage;
 import com.wellness.wellnessappbackend.ai.chat.dto.PythonChatRequest;
 import com.wellness.wellnessappbackend.ai.chat.dto.PythonChatResponse;
 import com.wellness.wellnessappbackend.exception.ApiException;
 import com.wellness.wellnessappbackend.exception.ErrorCode;
 import com.wellness.wellnessappbackend.user.AppUser;
 import com.wellness.wellnessappbackend.user.UserRepository;
-import com.wellness.wellnessappbackend.wellness.WellnessLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -32,9 +29,7 @@ public class AiChatService {
 
     private final AiClient aiClient;
     private final AiChatMapper aiChatMapper;
-    private final AiAdviceMapper aiAdviceMapper;
     private final AiChatMessageRepository aiChatMessageRepository;
-    private final WellnessLogRepository wellnessLogRepository;
     private final UserRepository userRepository;
 
     @Transactional
@@ -44,20 +39,13 @@ public class AiChatService {
         String conversationId = resolveConversationId(request.conversationId());
 
         List<AiChatMessage> history = recentHistory(userId, conversationId);
-        LocalDate endDate = LocalDate.now();
-        LocalDate startDate = endDate.minusDays(6);
-        List<PythonAiLog> recentLogs = wellnessLogRepository
-                .findByUserIdAndLogDateBetweenOrderByLogDateAsc(userId, startDate, endDate)
-                .stream()
-                .map(aiAdviceMapper::toPythonLog)
-                .toList();
+        List<PythonChatMessage> aiHistory = new ArrayList<>(history.stream().map(aiChatMapper::toPythonMessage).toList());
+        aiHistory.add(new PythonChatMessage("user", request.message().trim()));
 
         PythonChatResponse aiResponse = aiClient.chat(new PythonChatRequest(
                 userId,
-                conversationId,
                 request.message().trim(),
-                history.stream().map(aiChatMapper::toPythonMessage).toList(),
-                recentLogs
+                aiHistory
         ));
 
         AiChatMessage userMessage = new AiChatMessage();
@@ -83,6 +71,7 @@ public class AiChatService {
         return new AiChatResponse(
                 conversationId,
                 savedAssistantMessage.getContent(),
+                aiResponse.requestId(),
                 savedAssistantMessage.getModelName(),
                 savedAssistantMessage.getCreatedAt(),
                 responseMessages.stream().map(aiChatMapper::toDto).toList()

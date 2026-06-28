@@ -39,11 +39,12 @@ public class AiAdviceService {
                 request.startDate(),
                 request.endDate()
         );
+        if (logs.isEmpty()) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, ErrorCode.VALIDATION_ERROR, "No wellness logs found for selected date range");
+        }
 
         PythonAiRequest aiRequest = new PythonAiRequest(
                 userId,
-                request.startDate(),
-                request.endDate(),
                 logs.stream().map(aiAdviceMapper::toPythonLog).toList()
         );
         PythonAiResponse aiResponse = aiClient.generateAdvice(aiRequest);

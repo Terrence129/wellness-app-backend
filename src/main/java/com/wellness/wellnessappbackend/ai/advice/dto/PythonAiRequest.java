@@ -1,12 +1,13 @@
 package com.wellness.wellnessappbackend.ai.advice.dto;
 
-import java.time.LocalDate;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 import java.util.List;
 
 public record PythonAiRequest(
-        Long userId,
-        LocalDate startDate,
-        LocalDate endDate,
-        List<PythonAiLog> logs
+        @NotNull Long userId,
+        @NotNull @Size(max = 31) List<@Valid PythonAiLog> logs
 ) {
 }

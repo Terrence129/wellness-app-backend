@@ -59,7 +59,7 @@ server.port=8080
 spring.datasource.url=jdbc:mysql://localhost:3306/wellness-app?useSSL=false&serverTimezone=Asia/Singapore&allowPublicKeyRetrieval=true
 spring.datasource.username=root
 spring.datasource.password=123456
-app.ai.base-url=http://localhost:8000
+app.ai.base-url=http://127.0.0.1:8000
 ```
 
 For production, set a long random `JWT_SECRET` and avoid committing secrets.
@@ -145,13 +145,15 @@ Error:
 
 ## AI Service
 
-`POST /api/ai/advice` calls the internal FastAPI service:
+Clients call the Spring Boot API. Spring Boot loads the authenticated user, reads persisted logs or chat history, builds the FastAPI request body, and then calls the internal AI service.
+
+`POST /api/ai/advice` builds `{ "userId": ..., "logs": [...] }` from the selected date range and calls:
 
 ```text
 POST /ai/wellness-advice
 ```
 
-`POST /api/ai/chat` calls:
+`POST /api/ai/chat` builds `{ "userId": ..., "message": ..., "history": [...] }` from the current message and stored conversation history, then calls:
 
 ```text
 POST /ai/chat
@@ -162,7 +164,7 @@ Chat requests accept an optional `conversationId`. When omitted, the backend cre
 Configure its base URL with:
 
 ```properties
-app.ai.base-url=http://localhost:8000
+app.ai.base-url=http://127.0.0.1:8000
 ```
 
 If the AI service is unavailable, the backend returns `503 AI_SERVICE_UNAVAILABLE`.

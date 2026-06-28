@@ -572,8 +572,8 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('generate advice returns created or service unavailable', function () {",
-                  "  pm.expect([201, 503]).to.include(pm.response.code);",
+                  "pm.test('generate advice returns created, validation error, or service unavailable', function () {",
+                  "  pm.expect([201, 400, 503]).to.include(pm.response.code);",
                   "});"
                 ]
               }
