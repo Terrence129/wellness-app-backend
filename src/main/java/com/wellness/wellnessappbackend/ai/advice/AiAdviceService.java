@@ -1,8 +1,9 @@
-package com.wellness.wellnessappbackend.ai;
+package com.wellness.wellnessappbackend.ai.advice;
 
-import com.wellness.wellnessappbackend.ai.dto.GenerateAiAdviceRequest;
-import com.wellness.wellnessappbackend.ai.dto.PythonAiRequest;
-import com.wellness.wellnessappbackend.ai.dto.PythonAiResponse;
+import com.wellness.wellnessappbackend.ai.AiClient;
+import com.wellness.wellnessappbackend.ai.advice.dto.GenerateAiAdviceRequest;
+import com.wellness.wellnessappbackend.ai.advice.dto.PythonAiRequest;
+import com.wellness.wellnessappbackend.ai.advice.dto.PythonAiResponse;
 import com.wellness.wellnessappbackend.common.DateRangeValidator;
 import com.wellness.wellnessappbackend.exception.ApiException;
 import com.wellness.wellnessappbackend.exception.ErrorCode;

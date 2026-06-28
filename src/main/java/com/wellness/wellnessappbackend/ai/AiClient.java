@@ -1,7 +1,9 @@
 package com.wellness.wellnessappbackend.ai;
 
-import com.wellness.wellnessappbackend.ai.dto.PythonAiRequest;
-import com.wellness.wellnessappbackend.ai.dto.PythonAiResponse;
+import com.wellness.wellnessappbackend.ai.advice.dto.PythonAiRequest;
+import com.wellness.wellnessappbackend.ai.advice.dto.PythonAiResponse;
+import com.wellness.wellnessappbackend.ai.chat.dto.PythonChatRequest;
+import com.wellness.wellnessappbackend.ai.chat.dto.PythonChatResponse;
 import com.wellness.wellnessappbackend.exception.ApiException;
 import com.wellness.wellnessappbackend.exception.ErrorCode;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +29,22 @@ public class AiClient {
                     .retrieve()
                     .body(PythonAiResponse.class);
             if (response == null || response.adviceText() == null || response.adviceText().isBlank()) {
+                throw unavailable();
+            }
+            return response;
+        } catch (RestClientException ex) {
+            throw unavailable();
+        }
+    }
+
+    public PythonChatResponse chat(PythonChatRequest request) {
+        try {
+            PythonChatResponse response = restClient.post()
+                    .uri("/ai/chat")
+                    .body(request)
+                    .retrieve()
+                    .body(PythonChatResponse.class);
+            if (response == null || response.reply() == null || response.reply().isBlank()) {
                 throw unavailable();
             }
             return response;

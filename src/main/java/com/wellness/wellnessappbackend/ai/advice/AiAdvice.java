@@ -1,4 +1,4 @@
-package com.wellness.wellnessappbackend.ai;
+package com.wellness.wellnessappbackend.ai.advice;
 
 import com.wellness.wellnessappbackend.user.AppUser;
 import jakarta.persistence.Column;

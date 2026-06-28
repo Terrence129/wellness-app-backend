@@ -22,6 +22,7 @@ Spring Boot backend for the SimpleWell wellness MVP. The API provides JWT-secure
 - Service-layer ownership checks for user-owned records
 - Weekly wellness summary with averages and totals
 - AI advice generation via internal FastAPI endpoint
+- AI chatbot conversations with persisted message history
 - Stable JSON success/error envelopes
 - Flyway-managed tables and seed data
 
@@ -38,6 +39,7 @@ Flyway creates:
 - `users`
 - `wellness_logs`
 - `ai_advice`
+- `ai_chat_messages`
 
 Seed users:
 
@@ -105,6 +107,7 @@ AI:
 
 - `POST /api/ai/advice`
 - `GET /api/ai/advice/latest`
+- `POST /api/ai/chat`
 
 Protected endpoints require:
 
@@ -147,6 +150,14 @@ Error:
 ```text
 POST /ai/wellness-advice
 ```
+
+`POST /api/ai/chat` calls:
+
+```text
+POST /ai/chat
+```
+
+Chat requests accept an optional `conversationId`. When omitted, the backend creates one and persists both the user message and assistant reply in `ai_chat_messages`.
 
 Configure its base URL with:
 

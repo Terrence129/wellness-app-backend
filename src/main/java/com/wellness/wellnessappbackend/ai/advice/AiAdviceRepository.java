@@ -1,4 +1,4 @@
-package com.wellness.wellnessappbackend.ai;
+package com.wellness.wellnessappbackend.ai.advice;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

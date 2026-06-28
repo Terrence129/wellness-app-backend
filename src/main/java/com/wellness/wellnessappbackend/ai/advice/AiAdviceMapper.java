@@ -1,7 +1,7 @@
-package com.wellness.wellnessappbackend.ai;
+package com.wellness.wellnessappbackend.ai.advice;
 
-import com.wellness.wellnessappbackend.ai.dto.AiAdviceDto;
-import com.wellness.wellnessappbackend.ai.dto.PythonAiLog;
+import com.wellness.wellnessappbackend.ai.advice.dto.AiAdviceDto;
+import com.wellness.wellnessappbackend.ai.advice.dto.PythonAiLog;
 import com.wellness.wellnessappbackend.wellness.WellnessLog;
 import org.springframework.stereotype.Component;
 
