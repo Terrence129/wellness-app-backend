@@ -14,7 +14,9 @@ import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -44,14 +46,17 @@ public class WellnessLog {
     private BigDecimal sleepHours;
 
     @Column(name = "mood_score")
+    @JdbcTypeCode(SqlTypes.TINYINT)
     private Integer moodScore;
 
     @Column(name = "water_cups")
+    @JdbcTypeCode(SqlTypes.SMALLINT)
     private Integer waterCups;
 
     private Integer steps;
 
     @Column(name = "exercise_minutes")
+    @JdbcTypeCode(SqlTypes.SMALLINT)
     private Integer exerciseMinutes;
 
     @Column(length = 1000)
