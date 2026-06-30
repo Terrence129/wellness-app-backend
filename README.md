@@ -1,3 +1,6 @@
+Docker:
+`docker compose up --build`
+
 # Wellness App Backend
 
 Spring Boot backend for the SimpleWell wellness MVP. The API provides JWT-secured authentication, user profile access, wellness log CRUD, weekly summaries, and AI advice generation through an internal FastAPI service.
