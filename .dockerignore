@@ -1,0 +1,15 @@
+.git
+.idea
+.agents
+target
+.mvn/wrapper/maven-wrapper.jar
+*.iml
+*.log
+.env
+.env.*
+!.env.example
+Dockerfile
+docker-compose*.yml
+README.md
+docs
+postman

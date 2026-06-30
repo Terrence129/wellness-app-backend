@@ -80,6 +80,34 @@ mvnw.cmd spring-boot:run
 
 If the wrapper has trouble finding PowerShell on Windows, run Maven from the downloaded wrapper distribution under `~/.m2/wrapper/dists`, or add PowerShell to `PATH`.
 
+## Run With Docker
+
+Start the backend and MySQL together:
+
+```bash
+docker compose up --build
+```
+
+Build the backend image:
+
+```bash
+docker build -t wellness-app-backend .
+```
+
+Run it against a MySQL database reachable from the container. For MySQL running on the host machine:
+
+```powershell
+docker run --rm -p 8080:8080 `
+  -e DB_URL="jdbc:mysql://host.docker.internal:3306/wellness-app?useSSL=false&serverTimezone=Asia/Singapore&allowPublicKeyRetrieval=true" `
+  -e DB_USERNAME=root `
+  -e DB_PASSWORD=123456 `
+  -e JWT_SECRET=replace-with-a-long-random-secret-at-least-32-characters `
+  -e AI_SERVICE_BASE_URL=http://host.docker.internal:8000 `
+  wellness-app-backend
+```
+
+The Docker image uses the `docker` Spring profile by default, which expects MySQL at `mysql:3306` when used from a Docker network.
+
 ## API Overview
 
 Auth:
