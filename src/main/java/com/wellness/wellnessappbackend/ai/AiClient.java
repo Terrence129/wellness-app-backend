@@ -20,6 +20,13 @@ import org.springframework.web.client.RestClientResponseException;
 import java.time.Duration;
 import java.util.List;
 
+/**
+ * @description:
+ * @author: chenyaqi
+ * @email: terrence.yaqi.chen@u.nus.edu
+ * @date: 
+ */
+
 @Component
 public class AiClient {
 

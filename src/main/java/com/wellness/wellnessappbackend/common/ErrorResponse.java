@@ -5,6 +5,13 @@ import com.wellness.wellnessappbackend.exception.ErrorCode;
 
 import java.util.List;
 
+/**
+ * @description:
+ * @author: chenyaqi
+ * @email: terrence.yaqi.chen@u.nus.edu
+ * @date: 
+ */
+
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public record ErrorResponse(
         boolean success,

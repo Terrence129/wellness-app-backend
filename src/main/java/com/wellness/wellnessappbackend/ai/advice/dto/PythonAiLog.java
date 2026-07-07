@@ -8,6 +8,13 @@ import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * @description:
+ * @author: chenyaqi
+ * @email: terrence.yaqi.chen@u.nus.edu
+ * @date: 
+ */
+
 public record PythonAiLog(
         @NotNull LocalDate logDate,
         BigDecimal sleepHours,

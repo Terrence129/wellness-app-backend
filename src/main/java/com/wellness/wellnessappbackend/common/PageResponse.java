@@ -4,6 +4,13 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
+/**
+ * @description:
+ * @author: chenyaqi
+ * @email: terrence.yaqi.chen@u.nus.edu
+ * @date: 
+ */
+
 public record PageResponse<T>(
         List<T> content,
         PageMetadata page

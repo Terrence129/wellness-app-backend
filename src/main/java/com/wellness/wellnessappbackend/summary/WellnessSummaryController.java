@@ -14,6 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 
+/**
+ * @description:
+ * @author: chenyaqi
+ * @email: terrence.yaqi.chen@u.nus.edu
+ * @date: 
+ */
+
 @RestController
 @RequestMapping("/api/wellness-summary")
 @RequiredArgsConstructor

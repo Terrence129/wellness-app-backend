@@ -10,6 +10,13 @@ import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * @description:
+ * @author: chenyaqi
+ * @email: terrence.yaqi.chen@u.nus.edu
+ * @date: 
+ */
+
 public record WellnessLogCreateRequest(
         @NotNull LocalDate logDate,
         @DecimalMin("0.0") @DecimalMax("24.0") BigDecimal sleepHours,

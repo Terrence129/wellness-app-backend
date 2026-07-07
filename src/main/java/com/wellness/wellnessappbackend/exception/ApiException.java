@@ -2,6 +2,13 @@ package com.wellness.wellnessappbackend.exception;
 
 import org.springframework.http.HttpStatus;
 
+/**
+ * @description:
+ * @author: chenyaqi
+ * @email: terrence.yaqi.chen@u.nus.edu
+ * @date: 
+ */
+
 public class ApiException extends RuntimeException {
 
     private final HttpStatus status;

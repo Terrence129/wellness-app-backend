@@ -21,6 +21,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * @description:
+ * @author: chenyaqi
+ * @email: terrence.yaqi.chen@u.nus.edu
+ * @date: 
+ */
+
 @Service
 @RequiredArgsConstructor
 public class AiChatService {

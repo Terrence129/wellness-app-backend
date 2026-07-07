@@ -10,6 +10,13 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @description:
+ * @author: chenyaqi
+ * @email: terrence.yaqi.chen@u.nus.edu
+ * @date: 
+ */
+
 public interface WellnessLogRepository extends JpaRepository<WellnessLog, Long> {
 
     boolean existsByUserIdAndLogDate(Long userId, LocalDate logDate);

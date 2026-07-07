@@ -1,5 +1,12 @@
 package com.wellness.wellnessappbackend.exception;
 
+/**
+ * @description:
+ * @author: chenyaqi
+ * @email: terrence.yaqi.chen@u.nus.edu
+ * @date: 
+ */
+
 public enum ErrorCode {
     VALIDATION_ERROR,
     MALFORMED_JSON,
