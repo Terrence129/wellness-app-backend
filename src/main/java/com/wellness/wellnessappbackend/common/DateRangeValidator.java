@@ -6,6 +6,13 @@ import org.springframework.http.HttpStatus;
 
 import java.time.LocalDate;
 
+/**
+ * @description:
+ * @author: chenyaqi
+ * @email: terrence.yaqi.chen@u.nus.edu
+ * @date: 
+ */
+
 public final class DateRangeValidator {
 
     private DateRangeValidator() {

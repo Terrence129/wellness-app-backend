@@ -16,6 +16,13 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * @description:
+ * @author: chenyaqi
+ * @email: terrence.yaqi.chen@u.nus.edu
+ * @date: 
+ */
+
 @Service
 @RequiredArgsConstructor
 public class WellnessSummaryService {

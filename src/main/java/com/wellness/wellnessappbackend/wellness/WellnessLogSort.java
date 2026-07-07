@@ -8,6 +8,13 @@ import org.springframework.http.HttpStatus;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @description:
+ * @author: chenyaqi
+ * @email: terrence.yaqi.chen@u.nus.edu
+ * @date: 
+ */
+
 public final class WellnessLogSort {
 
     private static final Map<String, String> ALLOWED_FIELDS = Map.of(

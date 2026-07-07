@@ -1,5 +1,12 @@
 package com.wellness.wellnessappbackend.common;
 
+/**
+ * @description:
+ * @author: chenyaqi
+ * @email: terrence.yaqi.chen@u.nus.edu
+ * @date: 
+ */
+
 public record ApiResponse<T>(
         boolean success,
         String message,

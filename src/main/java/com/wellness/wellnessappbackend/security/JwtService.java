@@ -16,6 +16,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * @description:
+ * @author: chenyaqi
+ * @email: terrence.yaqi.chen@u.nus.edu
+ * @date: 
+ */
+
 @Service
 public class JwtService {
 

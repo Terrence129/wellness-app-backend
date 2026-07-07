@@ -8,6 +8,13 @@ import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
 
+/**
+ * @description:
+ * @author: chenyaqi
+ * @email: terrence.yaqi.chen@u.nus.edu
+ * @date: 
+ */
+
 public record WellnessLogUpdateRequest(
         @DecimalMin("0.0") @DecimalMax("24.0") BigDecimal sleepHours,
         @Min(1) @Max(5) Integer moodScore,

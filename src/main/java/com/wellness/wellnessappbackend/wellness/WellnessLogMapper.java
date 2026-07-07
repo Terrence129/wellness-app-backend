@@ -5,6 +5,13 @@ import com.wellness.wellnessappbackend.wellness.dto.WellnessLogDto;
 import com.wellness.wellnessappbackend.wellness.dto.WellnessLogUpdateRequest;
 import org.springframework.stereotype.Component;
 
+/**
+ * @description:
+ * @author: chenyaqi
+ * @email: terrence.yaqi.chen@u.nus.edu
+ * @date: 
+ */
+
 @Component
 public class WellnessLogMapper {
 

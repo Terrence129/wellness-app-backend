@@ -5,6 +5,13 @@ import com.wellness.wellnessappbackend.ai.advice.dto.PythonAiLog;
 import com.wellness.wellnessappbackend.wellness.WellnessLog;
 import org.springframework.stereotype.Component;
 
+/**
+ * @description:
+ * @author: chenyaqi
+ * @email: terrence.yaqi.chen@u.nus.edu
+ * @date: 
+ */
+
 @Component
 public class AiAdviceMapper {
 

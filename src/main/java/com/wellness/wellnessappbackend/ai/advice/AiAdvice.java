@@ -18,6 +18,13 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 
+/**
+ * @description:
+ * @author: chenyaqi
+ * @email: terrence.yaqi.chen@u.nus.edu
+ * @date: 
+ */
+
 @Entity
 @Table(name = "ai_advice")
 @Getter

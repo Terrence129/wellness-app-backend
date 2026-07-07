@@ -4,6 +4,13 @@ import com.wellness.wellnessappbackend.ai.chat.dto.AiChatMessageDto;
 import com.wellness.wellnessappbackend.ai.chat.dto.PythonChatMessage;
 import org.springframework.stereotype.Component;
 
+/**
+ * @description:
+ * @author: chenyaqi
+ * @email: terrence.yaqi.chen@u.nus.edu
+ * @date: 
+ */
+
 @Component
 public class AiChatMapper {
 
