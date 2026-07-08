@@ -66,6 +66,15 @@ public class WellnessLogService {
     public WellnessLog update(Long userId, Long id, WellnessLogUpdateRequest request) {
         WellnessLog log = wellnessLogRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(this::notFound);
+        if (request.logDate() != null
+                && !request.logDate().equals(log.getLogDate())
+                && wellnessLogRepository.existsByUserIdAndLogDate(userId, request.logDate())) {
+            throw new ApiException(
+                    HttpStatus.CONFLICT,
+                    ErrorCode.WELLNESS_LOG_ALREADY_EXISTS,
+                    "Wellness log already exists for this date"
+            );
+        }
         wellnessLogMapper.applyUpdateRequest(log, request);
         return wellnessLogRepository.save(log);
     }

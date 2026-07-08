@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
  * @description:
@@ -16,6 +17,7 @@ import java.math.BigDecimal;
  */
 
 public record WellnessLogUpdateRequest(
+        LocalDate logDate,
         @DecimalMin("0.0") @DecimalMax("24.0") BigDecimal sleepHours,
         @Min(1) @Max(5) Integer moodScore,
         @Min(0) @Max(100) Integer waterCups,
