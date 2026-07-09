@@ -3,7 +3,7 @@ Docker:
 
 # Wellness App Backend
 
-Spring Boot backend for the SimpleWell wellness MVP. The API provides JWT-secured authentication, user profile access, wellness log CRUD, weekly summaries, and AI advice generation through an internal FastAPI service.
+Spring Boot backend for the SimpleWell wellness MVP. The API provides JWT-secured authentication, user profile access, personal health info with BMI, wellness log CRUD, weekly summaries, and AI advice generation through an internal FastAPI service.
 
 ## Tech Stack
 
@@ -21,10 +21,12 @@ Spring Boot backend for the SimpleWell wellness MVP. The API provides JWT-secure
 - Register and login with email/password
 - JWT access tokens with issuer, audience, expiry, and `jti`
 - Authenticated `/api/users/me`
+- Current-user personal info with automatic BMI calculation
 - Create, list, retrieve, update, and delete wellness logs
 - Service-layer ownership checks for user-owned records
 - Weekly wellness summary with averages and totals
 - AI advice generation via internal FastAPI endpoint
+- AI advice history and chat conversation retrieval
 - AI chatbot conversations with persisted message history
 - Stable JSON success/error envelopes
 - Flyway-managed tables and seed data
@@ -41,6 +43,7 @@ Flyway creates:
 
 - `users`
 - `wellness_logs`
+- `user_personal_info`
 - `ai_advice`
 - `ai_chat_messages`
 
@@ -121,6 +124,8 @@ Auth:
 User:
 
 - `GET /api/users/me`
+- `GET /api/users/me/personal-info`
+- `PUT /api/users/me/personal-info`
 
 Wellness logs:
 
@@ -137,8 +142,12 @@ Summary:
 AI:
 
 - `POST /api/ai/advice`
+- `GET /api/ai/advice`
+- `GET /api/ai/advice/{id}`
 - `GET /api/ai/advice/latest`
 - `POST /api/ai/chat`
+- `GET /api/ai/chat/conversations`
+- `GET /api/ai/chat/conversations/{conversationId}/messages`
 
 Protected endpoints require:
 
@@ -191,6 +200,8 @@ POST /ai/chat
 ```
 
 Chat requests accept an optional `conversationId`. When omitted, the backend creates one and persists both the user message and assistant reply in `ai_chat_messages`.
+
+History retrieval endpoints read persisted `ai_advice` and `ai_chat_messages` only; they do not call the internal AI service.
 
 Configure its base URL with:
 

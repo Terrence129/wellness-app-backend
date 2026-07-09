@@ -41,6 +41,9 @@ public class WellnessLogMapper {
     }
 
     public void applyUpdateRequest(WellnessLog log, WellnessLogUpdateRequest request) {
+        if (request.logDate() != null) {
+            log.setLogDate(request.logDate());
+        }
         log.setSleepHours(request.sleepHours());
         log.setMoodScore(request.moodScore());
         log.setWaterCups(request.waterCups());

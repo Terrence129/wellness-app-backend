@@ -12,11 +12,14 @@ import com.wellness.wellnessappbackend.user.UserRepository;
 import com.wellness.wellnessappbackend.wellness.WellnessLog;
 import com.wellness.wellnessappbackend.wellness.WellnessLogRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.time.LocalDate;
 
 /**
  * @description:
@@ -71,5 +74,17 @@ public class AiAdviceService {
     public AiAdvice latest(Long userId) {
         return aiAdviceRepository.findFirstByUserIdOrderByCreatedAtDesc(userId)
                 .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, ErrorCode.NO_AI_ADVICE_FOUND, "No AI advice found"));
+    }
+
+    @Transactional(readOnly = true)
+    public Page<AiAdvice> list(Long userId, LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        DateRangeValidator.validateOptionalRange(startDate, endDate);
+        return aiAdviceRepository.findByUserAndOptionalAdviceDateRange(userId, startDate, endDate, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public AiAdvice getById(Long userId, Long id) {
+        return aiAdviceRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, ErrorCode.RESOURCE_NOT_FOUND, "AI advice not found"));
     }
 }
