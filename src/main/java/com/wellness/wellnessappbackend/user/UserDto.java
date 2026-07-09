@@ -1,5 +1,7 @@
 package com.wellness.wellnessappbackend.user;
 
+import java.math.BigDecimal;
+
 /**
  * @description:
  * @author: chenyaqi
@@ -10,6 +12,9 @@ package com.wellness.wellnessappbackend.user;
 public record UserDto(
         Long id,
         String username,
-        String email
+        String email,
+        BigDecimal heightCm,
+        BigDecimal weightKg,
+        Integer age
 ) {
 }
