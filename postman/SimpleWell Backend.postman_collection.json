@@ -167,6 +167,127 @@
       ]
     },
     {
+      "name": "Personal Info",
+      "item": [
+        {
+          "name": "Upsert Personal Info",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"heightCm\": 172.5,\n  \"weightKg\": 68.4,\n  \"gender\": \"MALE\",\n  \"dateOfBirth\": \"1995-04-12\",\n  \"activityLevel\": \"MODERATELY_ACTIVE\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/me/personal-info",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "me",
+                "personal-info"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('upsert personal info returns 200 or 201', function () {",
+                  "  pm.expect([200, 201]).to.include(pm.response.code);",
+                  "});",
+                  "const body = pm.response.json();",
+                  "pm.test('personal info response includes calculated BMI', function () {",
+                  "  pm.expect(body.success).to.eql(true);",
+                  "  pm.expect(body.data.heightCm).to.eql(172.5);",
+                  "  pm.expect(body.data.weightKg).to.eql(68.4);",
+                  "  pm.expect(body.data.bmi).to.eql(23.0);",
+                  "});",
+                  "pm.environment.set('personalInfoId', String(body.data.id));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Personal Info",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/me/personal-info",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "me",
+                "personal-info"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('get personal info returns 200 after upsert', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "const body = pm.response.json();",
+                  "pm.test('get personal info success envelope', function () {",
+                  "  pm.expect(body.success).to.eql(true);",
+                  "  pm.expect(body.data.id).to.eql(Number(pm.environment.get('personalInfoId')));",
+                  "  pm.expect(body.data.bmi).to.eql(23.0);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "Wellness Logs",
       "item": [
         {

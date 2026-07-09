@@ -3,7 +3,7 @@ Docker:
 
 # Wellness App Backend
 
-Spring Boot backend for the SimpleWell wellness MVP. The API provides JWT-secured authentication, user profile access, wellness log CRUD, weekly summaries, and AI advice generation through an internal FastAPI service.
+Spring Boot backend for the SimpleWell wellness MVP. The API provides JWT-secured authentication, user profile access, personal health info with BMI, wellness log CRUD, weekly summaries, and AI advice generation through an internal FastAPI service.
 
 ## Tech Stack
 
@@ -21,6 +21,7 @@ Spring Boot backend for the SimpleWell wellness MVP. The API provides JWT-secure
 - Register and login with email/password
 - JWT access tokens with issuer, audience, expiry, and `jti`
 - Authenticated `/api/users/me`
+- Current-user personal info with automatic BMI calculation
 - Create, list, retrieve, update, and delete wellness logs
 - Service-layer ownership checks for user-owned records
 - Weekly wellness summary with averages and totals
@@ -41,6 +42,7 @@ Flyway creates:
 
 - `users`
 - `wellness_logs`
+- `user_personal_info`
 - `ai_advice`
 - `ai_chat_messages`
 
@@ -121,6 +123,8 @@ Auth:
 User:
 
 - `GET /api/users/me`
+- `GET /api/users/me/personal-info`
+- `PUT /api/users/me/personal-info`
 
 Wellness logs:
 
