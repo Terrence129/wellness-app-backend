@@ -695,7 +695,11 @@
                 "exec": [
                   "pm.test('generate advice returns created, validation error, or service unavailable', function () {",
                   "  pm.expect([201, 400, 503]).to.include(pm.response.code);",
-                  "});"
+                  "});",
+                  "if (pm.response.code === 201) {",
+                  "  const body = pm.response.json();",
+                  "  pm.environment.set('adviceId', String(body.data.id));",
+                  "}"
                 ]
               }
             }
@@ -764,9 +768,274 @@
                   "if (pm.response.code === 200) {",
                   "  const body = pm.response.json();",
                   "  pm.environment.set('chatConversationId', body.data.conversationId);",
+                  "  pm.environment.set('chatHistoryConversationId', body.data.conversationId);",
                   "  pm.test('chat has reply', function () {",
                   "    pm.expect(body.data.reply).to.be.a('string').and.not.empty;",
                   "  });",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Advice History",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ai/advice?startDate={{startDate}}&endDate={{endDate}}&page=0&size=20&sort=createdAt,desc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ai",
+                "advice"
+              ],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "{{startDate}}"
+                },
+                {
+                  "key": "endDate",
+                  "value": "{{endDate}}"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "20"
+                },
+                {
+                  "key": "sort",
+                  "value": "createdAt,desc"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('list advice history returns 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "const body = pm.response.json();",
+                  "pm.test('list advice history has page metadata', function () {",
+                  "  pm.expect(body.success).to.eql(true);",
+                  "  pm.expect(body.data).to.have.property('content');",
+                  "  pm.expect(body.data.page).to.have.property('totalElements');",
+                  "});",
+                  "if (body.data.content.length > 0) {",
+                  "  pm.environment.set('adviceId', String(body.data.content[0].id));",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Advice By Id",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ai/advice/{{adviceId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ai",
+                "advice",
+                "{{adviceId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('get advice by id returns 200 or not found', function () {",
+                  "  pm.expect([200, 404]).to.include(pm.response.code);",
+                  "});",
+                  "if (pm.response.code === 200) {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.success).to.eql(true);",
+                  "  pm.expect(body.data.id).to.eql(Number(pm.environment.get('adviceId')));",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Chat Conversations",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ai/chat/conversations?page=0&size=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ai",
+                "chat",
+                "conversations"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "20"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('list chat conversations returns 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "const body = pm.response.json();",
+                  "pm.test('list chat conversations has page metadata', function () {",
+                  "  pm.expect(body.success).to.eql(true);",
+                  "  pm.expect(body.data).to.have.property('content');",
+                  "  pm.expect(body.data.page).to.have.property('totalElements');",
+                  "});",
+                  "if (body.data.content.length > 0) {",
+                  "  pm.environment.set('chatHistoryConversationId', body.data.content[0].conversationId);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Chat Conversation Messages",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ai/chat/conversations/{{chatHistoryConversationId}}/messages?page=0&size=50&sort=createdAt,asc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ai",
+                "chat",
+                "conversations",
+                "{{chatHistoryConversationId}}",
+                "messages"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "50"
+                },
+                {
+                  "key": "sort",
+                  "value": "createdAt,asc"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('get chat conversation messages returns 200 or not found', function () {",
+                  "  pm.expect([200, 404]).to.include(pm.response.code);",
+                  "});",
+                  "if (pm.response.code === 200) {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.success).to.eql(true);",
+                  "  pm.expect(body.data).to.have.property('content');",
+                  "  pm.expect(body.data.page).to.have.property('totalElements');",
                   "}"
                 ]
               }
